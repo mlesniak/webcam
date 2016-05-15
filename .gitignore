@@ -1,0 +1,24 @@
+### Bower ###
+src/frontend/libs
+
+### System ###
+*.DS_Store
+*Thumbs.db
+
+### Editor settings ###
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+
+### IDEA and Java ###
+*.iml
+.idea/
+*.class
+/target
+
+
+### Generated files ###
+build.log
+log/
+git.properties
