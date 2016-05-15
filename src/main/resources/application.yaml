@@ -2,3 +2,4 @@ spring:
   main:
     # Disable startup banner.
     banner-mode: "off"
+    log-startup-info: false
