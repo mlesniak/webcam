@@ -1,0 +1,4 @@
+spring:
+  main:
+    # Disable startup banner.
+    banner-mode: "off"
