@@ -1,11 +1,14 @@
 package com.mlesniak.webcam;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.bytedeco.javacv.CanvasFrame;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.FrameGrabber;
+import org.bytedeco.javacv.OpenCVFrameGrabber;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import javax.swing.*;
 
 /**
  * Entry point.
@@ -14,17 +17,22 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class Main implements CommandLineRunner {
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
-
-    @Autowired
-    private DummyService service;
-
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        SpringApplication app = new SpringApplication(Main.class);
+        app.setHeadless(false);
+        app.run(args);
     }
 
     @Override
     public void run(String... strings) throws Exception {
-        LOG.info("DI: {}", service.time());
+        CanvasFrame canvas = new CanvasFrame("Webcam");
+        canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        FrameGrabber grabber = new OpenCVFrameGrabber("");
+        grabber.start();
+        while (true) {
+            Frame frame = grabber.grab();
+            canvas.setCanvasSize(grabber.getImageWidth(), grabber.getImageHeight());
+            canvas.showImage(frame);
+        }
     }
 }
