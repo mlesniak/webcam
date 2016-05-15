@@ -51,14 +51,18 @@ public class Main implements CommandLineRunner {
     private Frame processFrame(Frame frame) {
         opencv_core.Mat mat = converter.convert(frame);
 
-        opencv_core.Rect rect = new opencv_core.Rect(550, 50, 100, 100);
-        opencv_imgproc.rectangle(mat,
-                rect,
-                new opencv_core.Scalar(0, 0, 255, 255), 2, 1, 1);
+        double ratio = ((double) grabber.getImageWidth()) / grabber.getImageHeight();
+        int width = 200;
+        int height = (int) (width / ratio);
+        int x = grabber.getImageWidth() - width;
+        int y = grabber.getImageHeight() - height;
 
-        opencv_core.Mat sub = mat.colRange(0, grabber.getImageWidth() / 2);
-        opencv_imgproc.blur(sub, sub, new opencv_core.Size(50, 50));
-        sub.copyTo(mat.colRange(0, 100).rowRange(1, 100));
+        opencv_core.Rect rect = new opencv_core.Rect(x, y, width, height);
+        opencv_core.Mat roi = mat.apply(rect);
+
+        opencv_core.Mat sub = new opencv_core.Mat();
+        opencv_imgproc.resize(mat, sub, new opencv_core.Size(width, height));
+        sub.copyTo(roi);
 
         return converter.convert(mat);
     }
