@@ -17,6 +17,7 @@ import javax.swing.*;
 @SpringBootApplication
 public class Main implements CommandLineRunner {
     private OpenCVFrameConverter.ToMat converter;
+    private FrameGrabber grabber;
 
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Main.class);
@@ -28,7 +29,7 @@ public class Main implements CommandLineRunner {
     public void run(String... strings) throws Exception {
         CanvasFrame canvas = new CanvasFrame("Webcam");
         canvas.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        FrameGrabber grabber = new OpenCVFrameGrabber("");
+        grabber = new OpenCVFrameGrabber("");
         grabber.start();
 
         converter = new OpenCVFrameConverter.ToMat();
@@ -50,10 +51,15 @@ public class Main implements CommandLineRunner {
     private Frame processFrame(Frame frame) {
         opencv_core.Mat mat = converter.convert(frame);
 
-        opencv_core.Rect rect = new opencv_core.Rect(50, 50, 100, 100);
+        opencv_core.Rect rect = new opencv_core.Rect(550, 50, 100, 100);
         opencv_imgproc.rectangle(mat,
                 rect,
                 new opencv_core.Scalar(0, 0, 255, 255), 2, 1, 1);
+
+        opencv_core.Mat sub = mat.colRange(0, grabber.getImageWidth() / 2);
+        opencv_imgproc.blur(sub, sub, new opencv_core.Size(50, 50));
+        sub.copyTo(mat.colRange(0, 100).rowRange(1, 100));
+
         return converter.convert(mat);
     }
 }
