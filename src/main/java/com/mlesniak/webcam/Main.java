@@ -62,9 +62,9 @@ public class Main implements CommandLineRunner {
 
         opencv_core.Mat sub = new opencv_core.Mat();
         opencv_imgproc.resize(mat, sub, new opencv_core.Size(width, height));
-        opencv_imgproc.blur(sub, sub, new opencv_core.Size(10, 10));
-        sub.copyTo(roi);
+        opencv_imgproc.blur(mat, mat, new opencv_core.Size(20, 20));
 
+        sub.copyTo(roi);
         return converter.convert(mat);
     }
 }
