@@ -49,10 +49,11 @@ public class Main implements CommandLineRunner {
      */
     private Frame processFrame(Frame frame) {
         opencv_core.Mat mat = converter.convert(frame);
+
+        opencv_core.Rect rect = new opencv_core.Rect(50, 50, 100, 100);
         opencv_imgproc.rectangle(mat,
-                new opencv_core.Point(50, 50),
-                new opencv_core.Point(100, 100),
-                new opencv_core.Scalar(255, 255, 0, 1));
+                rect,
+                new opencv_core.Scalar(0, 0, 255, 255), 2, 1, 1);
         return converter.convert(mat);
     }
 }
